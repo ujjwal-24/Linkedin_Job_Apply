@@ -1,0 +1,62 @@
+{
+  "personals": {
+    "first_name": "Ujjwal",
+    "middle_name": "Kumar",
+    "last_name": "Singh",
+    "phone_number": "9885070034",
+    "current_city": "Noida",
+    "street": "",
+    "state": "Uttar Pradesh",
+    "zipcode": "",
+    "country": "India",
+    "email": "ujjwal.singh.121096@gmail.com"
+  },
+  "questions": {
+    "default_resume_path": "all resumes/default/Ujjwal_Singh_Resume.pdf",
+    "years_of_experience": "5.6",
+    "website": "",
+    "linkedIn": "https://www.linkedin.com/in/ujjwal-singh24",
+    "require_visa": "No",
+    "legally_authorized": "Yes",
+    "us_citizenship": "",
+    "desired_salary": 2000000,
+    "current_ctc": 1200000,
+    "notice_period": 0,
+    "linkedin_headline": "Performance Test Engineer | JMeter, LoadRunner, BlazeMeter | API & Cloud Performance Testing",
+    "linkedin_summary": "Performance Test Engineer with 5.6 years of experience in Apache JMeter, LoadRunner, BlazeMeter, web/API testing and Postman. Experienced in NFR gathering, workload modelling, load, stress, volume, endurance and failover testing, correlation and parameterization. Analyzes throughput, response time, JVM/GC/JDBC/thread pools and AWR reports. Uses Grafana, Splunk, Dynatrace, Jenkins, Docker and Kubernetes. Performed GCP, AWS and Azure infrastructure benchmarking and cost/performance analysis.",
+    "cover_letter": "",
+    "user_information_all": "Performance Test Engineer with 5.6 years of experience in Apache JMeter, LoadRunner, BlazeMeter, web/API testing and Postman. Experienced in NFR gathering, workload modelling, load, stress, volume, endurance and failover testing, correlation and parameterization. Analyzes throughput, response time, JVM/GC/JDBC/thread pools and AWR reports. Uses Grafana, Splunk, Dynatrace, Jenkins, Docker and Kubernetes. Performed GCP, AWS and Azure infrastructure benchmarking and cost/performance analysis. Current employer: GlobalLogic India Pvt Ltd, Senior Test Engineer, December 2022–Present. Previously Techuva Solutions Pvt Ltd, September 2020–April 2022. B.Tech Computer Science & Engineering, AKTU, 2018. Based in Noida, India. Seeking performance testing roles anywhere in India except Chennai. Do not infer citizenship or skill-specific years of experience.\nConfirmed compensation: current CTC INR 12 lakh per annum; expected CTC INR 18–20 lakh per annum (use INR 20 lakh when a single numeric expected CTC is required). Immediate joiner, notice period 0 days. LinkedIn: https://www.linkedin.com/in/ujjwal-singh24. Authorized to work in India. Visa sponsorship is not required for work in India.\nUser confirmed authorization to work in India; do not extend this authorization to other countries.",
+    "recent_employer": "GlobalLogic India Pvt Ltd",
+    "confidence_level": "",
+    "pause_before_submit": true,
+    "pause_at_failed_question": true
+  },
+  "search": {
+    "search_location": "India",
+    "excluded_locations": [
+      "Chennai",
+      "Madras"
+    ],
+    "search_terms": [
+      "Performance Test Engineer",
+      "Senior Performance Test Engineer",
+      "Performance Testing",
+      "Load Test Engineer",
+      "JMeter",
+      "LoadRunner",
+      "BlazeMeter"
+    ],
+    "did_masters": false,
+    "current_experience": 5,
+    "bad_words": [],
+    "about_company_bad_words": [],
+    "on_site": [],
+    "location": []
+  },
+  "settings": {
+    "stop_before_submit": true
+  },
+  "secrets": {
+    "use_AI": false
+  }
+}

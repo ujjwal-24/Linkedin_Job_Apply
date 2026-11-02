@@ -1,9 +1,12 @@
 # CV profile and India search
 
-The uploaded CV has been configured in this cloud checkout using the ignored
-`user_config.json`. Its PDF is stored at
-`all resumes/default/Ujjwal_Singh_Resume.pdf` (also ignored). Neither file is
-included in Git. A fresh clone must receive these local files separately.
+The uploaded CV is configured using `user_config.json`. At the repository owner's
+explicit request, this profile and its PDF at
+`all resumes/default/Ujjwal_Singh_Resume.pdf` are committed to Git, so fresh clones
+include the personalized setup. The profile includes personal contact information
+and compensation preferences. Do not save login passwords or API keys in the
+tracked profile; use an interactive LinkedIn login and keep AI disabled unless
+credential storage is moved to a private configuration path.
 
 The profile includes the CV's name, contact details, Noida location, employer,
 B.Tech education in its background context, performance testing skills, and the
@@ -21,10 +24,10 @@ filter uses the listing's location, not every city mentioned in its description.
 
 Confirmed compensation, notice period and LinkedIn URL are stored in the local
 profile. The expected CTC range is retained in the background context; forms
-requiring one numeric value use its upper bound. These personal values are not
-included in Git. Salary and notice fields support JSON `null` if cleared later.
-Visa, work authorization, citizenship, portfolio URL and confidence rating remain
-blank until provided. Contact email is separate from the LinkedIn login.
+requiring one numeric value use its upper bound. These values are included in
+the committed profile as requested. Salary and notice fields support JSON `null` if cleared later.
+Work authorization for India is confirmed and visa sponsorship is not required.
+Citizenship, portfolio URL and confidence rating remain blank until provided. Contact email is separate from the LinkedIn login.
 
 AI is disabled in the local profile. `stop_before_submit` is enabled, so a run
 fills an application and discards it at review rather than submitting it. No

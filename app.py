@@ -371,7 +371,7 @@ def api_save_config():
                 unknown.append(f"{section}.{key}")
                 continue
             try:
-                coerced.setdefault(section, {})[key] = _coerce(field["type"], value)
+                coerced.setdefault(section, {})[key] = (None if field.get("nullable") and (value is None or value == "") else _coerce(field["type"], value))
             except ValueError as err:
                 return jsonify({"error": f"Invalid value for '{section}.{key}': {err}"}), 400
 

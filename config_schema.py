@@ -62,7 +62,7 @@ AI_MODELS = {
 
 
 def _f(section, config_module, key, label, ftype, help,
-       options=None, advanced=False, ai=False, models_by_provider=None):
+       options=None, advanced=False, ai=False, models_by_provider=None, nullable=False):
     field = {
         "section": section,
         "config_module": config_module,
@@ -71,6 +71,8 @@ def _f(section, config_module, key, label, ftype, help,
         "type": ftype,
         "help": help,
     }
+    if nullable:
+        field["nullable"] = True
     if options is not None:
         field["options"] = options
     if advanced:
@@ -127,22 +129,26 @@ SCHEMA = [
                "Your legal last name."),
             _f("Profile", "personals", "phone_number", "Phone number", "text",
                "A valid phone number. Applications often require this."),
+            _f("Profile", "personals", "email", "Contact email", "text",
+               "Your contact email for application forms. This does not change your LinkedIn login."),
             _f("Profile", "personals", "current_city", "Current city", "text",
                "The city you live in. If left blank, the tool fills in the job's location instead."),
             _f("Profile", "questions", "years_of_experience", "Years of experience", "text",
                "What to answer for 'how many years of experience do you have' questions. A number in text, e.g. 0, 1, 3, 5."),
             _f("Profile", "questions", "require_visa", "Need visa sponsorship?", "select",
                "Do you need visa sponsorship now or in the future?",
-               options=["Yes", "No"]),
+               options=["", "Yes", "No"]),
+            _f("Profile", "questions", "legally_authorized", "Authorized to work in the target country?", "select",
+               "Leave blank unless confirmed. A current address does not establish work authorization.", options=["", "Yes", "No"]),
             _f("Profile", "questions", "us_citizenship", "Citizenship status", "select",
                "Your work-authorization / citizenship status for US applications.",
-               options=["U.S. Citizen/Permanent Resident", "Non-citizen allowed to work for any employer", "Non-citizen allowed to work for current employer", "Non-citizen seeking work authorization", "Canadian Citizen/Permanent Resident", "Other"]),
+               options=["", "U.S. Citizen/Permanent Resident", "Non-citizen allowed to work for any employer", "Non-citizen allowed to work for current employer", "Non-citizen seeking work authorization", "Canadian Citizen/Permanent Resident", "Other"]),
             _f("Profile", "questions", "desired_salary", "Desired salary", "number",
-               "Your expected salary or CTC as a plain number (no currency symbols or commas), e.g. 100000. Some forms only accept numbers."),
+               "Your expected salary or CTC as a plain number (no currency symbols or commas), e.g. 100000. Some forms only accept numbers. Leave blank for manual review.", nullable=True),
             _f("Profile", "questions", "current_ctc", "Current salary", "number",
-               "Your current salary or CTC as a plain number, e.g. 80000."),
+               "Your current salary or CTC as a plain number, e.g. 80000. Leave blank for manual review.", nullable=True),
             _f("Profile", "questions", "notice_period", "Notice period (days)", "number",
-               "Your notice period in days, e.g. 0, 15, 30. The tool converts to weeks or months if a form asks that way."),
+               "Your notice period in days, e.g. 0, 15, 30. The tool converts to weeks or months if a form asks that way. Leave blank for manual review.", nullable=True),
             _f("Profile", "questions", "linkedIn", "LinkedIn profile URL", "text",
                "The link to your LinkedIn profile, e.g. https://www.linkedin.com/in/yourname ."),
             _f("Profile", "questions", "website", "Portfolio website", "text",
@@ -189,6 +195,8 @@ SCHEMA = [
                "Job titles to search for, separated by commas, e.g. Software Engineer, Python Developer, Full Stack Developer."),
             _f("Search", "search", "search_location", "Search location", "text",
                "Where to look for jobs. Examples: United States, India, 'Chicago, Illinois, United States'. Leave blank to not set a location."),
+            _f("Search", "search", "excluded_locations", "Excluded locations", "list",
+               "Skip jobs whose listed location contains these city names. Chennai and Madras are excluded by default, including remote roles listed there."),
             _f("Search", "search", "date_posted", "Date posted", "select",
                "Only include jobs posted within this window. Leave blank to not filter by date.",
                options=["", "Any time", "Past month", "Past week", "Past 24 hours"]),

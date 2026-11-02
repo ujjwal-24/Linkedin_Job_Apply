@@ -61,6 +61,7 @@ def validate_personals() -> None | ValueError | TypeError:
 
     check_string(phone_number, "phone_number", min_length=10)
 
+    check_string(email, "email")
     check_string(current_city, "current_city")
     
     check_string(street, "street")
@@ -85,14 +86,17 @@ def validate_questions() -> None | ValueError | TypeError:
 
     check_string(default_resume_path, "default_resume_path")
     check_string(years_of_experience, "years_of_experience")
-    check_string(require_visa, "require_visa", ["Yes", "No"])
+    check_string(require_visa, "require_visa", ["", "Yes", "No"])
     check_string(website, "website")
     check_string(linkedIn, "linkedIn")
-    check_int(desired_salary, "desired_salary")
-    check_string(us_citizenship, "us_citizenship", ["U.S. Citizen/Permanent Resident", "Non-citizen allowed to work for any employer", "Non-citizen allowed to work for current employer", "Non-citizen seeking work authorization", "Canadian Citizen/Permanent Resident", "Other"])
+    if desired_salary is not None:
+        check_int(desired_salary, "desired_salary")
+    check_string(us_citizenship, "us_citizenship", ["", "U.S. Citizen/Permanent Resident", "Non-citizen allowed to work for any employer", "Non-citizen allowed to work for current employer", "Non-citizen seeking work authorization", "Canadian Citizen/Permanent Resident", "Other"])
     check_string(linkedin_headline, "linkedin_headline")
-    check_int(notice_period, "notice_period")
-    check_int(current_ctc, "current_ctc")
+    if notice_period is not None:
+        check_int(notice_period, "notice_period")
+    if current_ctc is not None:
+        check_int(current_ctc, "current_ctc")
     check_string(linkedin_summary, "linkedin_summary")
     check_string(cover_letter, "cover_letter")
     check_string(recent_employer, "recent_employer")
@@ -113,6 +117,7 @@ def validate_search() -> None | ValueError | TypeError:
 
     check_list(search_terms, "search_terms", min_length=1)
     check_string(search_location, "search_location")
+    check_list(excluded_locations, "excluded_locations")
     check_int(switch_number, "switch_number", 1)
     check_boolean(randomize_search_order, "randomize_search_order")
 

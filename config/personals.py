@@ -26,6 +26,9 @@ last_name = "Golla"                # Your last name in quotes Eg: "Last", "Golla
 # Phone number (required), make sure it's valid.
 phone_number = "9876543210"        # Enter your 10 digit number in quotes Eg: "9876543210"
 
+# Contact email used in application forms (separate from login credentials).
+email = ""
+
 # What is your current city?
 current_city = ""                  # Los Angeles, San Francisco, etc.
 '''

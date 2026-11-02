@@ -46,6 +46,7 @@ from modules.open_chrome import *
 from modules.helpers import *
 from modules.clickers_and_finders import *
 from modules.validator import validate_config
+from modules.profile_rules import excluded_location, numeric_answers
 
 if use_AI:
     from modules.ai.connections import create_ai_client, extract_skills, answer_question, close_ai_client
@@ -110,17 +111,9 @@ dailyEasyApplyLimitReached = False
 
 re_experience = re.compile(r'[(]?\s*(\d+)\s*[)]?\s*[-to]*\s*\d*[+]*\s*year[s]?', re.IGNORECASE)
 
-desired_salary_lakhs = str(round(desired_salary / 100000, 2))
-desired_salary_monthly = str(round(desired_salary/12, 2))
-desired_salary = str(desired_salary)
-
-current_ctc_lakhs = str(round(current_ctc / 100000, 2))
-current_ctc_monthly = str(round(current_ctc/12, 2))
-current_ctc = str(current_ctc)
-
-notice_period_months = str(notice_period//30)
-notice_period_weeks = str(notice_period//7)
-notice_period = str(notice_period)
+desired_salary, desired_salary_monthly, desired_salary_lakhs = numeric_answers(desired_salary, salary=True)
+current_ctc, current_ctc_monthly, current_ctc_lakhs = numeric_answers(current_ctc, salary=True)
+notice_period, notice_period_months, notice_period_weeks = numeric_answers(notice_period)
 
 aiClient = None
 about_company_for_ai = None  # filled in later, once we're processing a specific job
@@ -377,6 +370,11 @@ def get_job_main_details(job: WebElement, blacklisted_companies: set, rejected_j
         work_style = work_location[work_location.rfind('(')+1:work_location.rfind(')')]
         work_location = work_location[:work_location.rfind('(')].strip()
     
+    excluded_city = excluded_location(work_location, excluded_locations)
+    if excluded_city or (excluded_locations and work_location.lower() in ("", "unknown")):
+        print_lg(f'Skipping "{title} | {company}" in excluded location "{work_location}".')
+        return job_id, title, company, work_location, work_style, True
+
     # Skip if previously rejected due to blacklist or already applied
     if company in blacklisted_companies:
         print_lg(f'Skipping "{title} | {company}" job (Blacklisted Company). Job ID: {job_id}!')
@@ -827,11 +825,7 @@ def answer_questions(modal: WebElement, questions_list: set, work_location: str,
                 elif label_has(label, 'phone', 'mobile'): answer = phone_number
                 elif label_has(label, 'street'): answer = street
                 elif label_has(label, 'email'):
-                    # "Email address" contains the whole word "address", so without this guard it
-                    # falls through below and types the user's CITY into the email box. There is no
-                    # email value in config/personals.py, so leave it for LinkedIn's own prefill
-                    # rather than guessing. ponytail: add `email` to personals.py to answer it.
-                    print_lg(f'No configured answer for the email question "{label_org}". Leaving LinkedIn\'s own value in place.')
+                    answer = email
                 elif label_has(label, 'city', 'location', 'address'):
                     answer = current_city if current_city else work_location
                     do_actions = True

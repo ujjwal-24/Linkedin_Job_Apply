@@ -668,7 +668,7 @@
             }
             if (field.type === 'number') {
                 var t = node.value.trim();
-                if (t === '') return undefined; // leave unchanged, avoid server error
+                if (t === '') return field.nullable ? null : undefined;
                 var n = Number(t);
                 return isNaN(n) ? undefined : n;
             }

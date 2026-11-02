@@ -371,7 +371,12 @@ def api_save_config():
                 unknown.append(f"{section}.{key}")
                 continue
             try:
-                coerced.setdefault(section, {})[key] = (None if field.get("nullable") and (value is None or value == "") else _coerce(field["type"], value))
+                result = (None if field.get("nullable") and (value is None or value == "") else _coerce(field["type"], value))
+                result = _overrides.normalize_setting(section, key, result)
+                if section == "search" and key == "experience_level":
+                    if any(level not in _overrides.EXPERIENCE_LEVELS for level in result):
+                        raise ValueError("choose experience levels from: " + ", ".join(_overrides.EXPERIENCE_LEVELS))
+                coerced.setdefault(section, {})[key] = result
             except ValueError as err:
                 return jsonify({"error": f"Invalid value for '{section}.{key}': {err}"}), 400
 

@@ -11,6 +11,7 @@ License: MIT  (https://opensource.org/license/mit)
 '''
 
 import config._overrides as overrides
+import json
 
 
 def test_apply_overrides_only_existing_globals(monkeypatch):
@@ -63,3 +64,17 @@ def test_load_user_config_reads_valid_json(monkeypatch, tmp_path):
     good.write_text('{"secrets": {"use_AI": true}}', encoding="utf-8")
     monkeypatch.setattr(overrides, "USER_CONFIG_PATH", str(good))
     assert overrides.load_user_config() == {"secrets": {"use_AI": True}}
+
+
+def test_existing_shorthand_profile_loads_canonical_experience_level(monkeypatch, tmp_path):
+    path = tmp_path / "user_config.json"
+    path.write_text(json.dumps({"search": {"experience_level": ["Mid-Senior", " entry LEVEL "]}}))
+    monkeypatch.setattr(overrides, "USER_CONFIG_PATH", str(path))
+    globals_ = {"experience_level": []}
+    overrides.apply("config.search", globals_)
+    assert globals_["experience_level"] == ["Mid-Senior level", "Entry level"]
+    assert json.loads(path.read_text())["search"]["experience_level"][0] == "Mid-Senior"
+
+
+def test_experience_normalization_does_not_guess_unknown_levels():
+    assert overrides.normalize_setting("search", "experience_level", ["Manager"]) == ["Manager"]

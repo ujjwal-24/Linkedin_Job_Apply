@@ -15,6 +15,30 @@ import json
 import os
 
 
+def test_experience_shorthand_save_is_canonical(client, tmp_path, monkeypatch):
+    import app
+    import config._overrides as overrides
+    path = str(tmp_path / "user_config.json")
+    monkeypatch.setattr(app, "USER_CONFIG_PATH", path)
+    monkeypatch.setattr(overrides, "USER_CONFIG_PATH", path)
+    response = client.post("/api/config", json={"search": {"experience_level": ["Mid-Senior"]}})
+    assert response.status_code == 200
+    assert response.get_json()["search"]["experience_level"] == ["Mid-Senior level"]
+    with open(path, encoding="utf-8") as file:
+        assert json.load(file)["search"]["experience_level"] == ["Mid-Senior level"]
+
+
+def test_unknown_experience_level_rejected_before_saving(client, tmp_path, monkeypatch):
+    import app
+    import config._overrides as overrides
+    path = str(tmp_path / "user_config.json")
+    monkeypatch.setattr(app, "USER_CONFIG_PATH", path)
+    monkeypatch.setattr(overrides, "USER_CONFIG_PATH", path)
+    response = client.post("/api/config", json={"search": {"experience_level": ["Manager"]}})
+    assert response.status_code == 400
+    assert not os.path.exists(path)
+
+
 # --------------------------------- schema -----------------------------------
 def test_schema_endpoint_returns_nonempty_list(client):
     resp = client.get("/api/schema")

@@ -22,6 +22,20 @@ _CONFIG_DIR = os.path.dirname(os.path.abspath(__file__))
 _ROOT_DIR = os.path.dirname(_CONFIG_DIR)
 USER_CONFIG_PATH = os.path.join(_ROOT_DIR, "user_config.json")
 
+EXPERIENCE_LEVELS = (
+    "Internship", "Entry level", "Associate", "Mid-Senior level", "Director", "Executive",
+)
+
+
+def normalize_setting(section: str, key: str, value):
+    """Accept common experience-level shorthand without guessing unknown values."""
+    if section != "search" or key != "experience_level" or not isinstance(value, list):
+        return value
+    aliases = {level.casefold(): level for level in EXPERIENCE_LEVELS}
+    aliases.update({"mid-senior": "Mid-Senior level", "entry": "Entry level"})
+    return [aliases.get(item.strip().casefold(), item.strip())
+            if isinstance(item, str) else item for item in value]
+
 
 def load_user_config() -> dict:
     '''
@@ -31,7 +45,13 @@ def load_user_config() -> dict:
     try:
         with open(USER_CONFIG_PATH, "r", encoding="utf-8") as file:
             data = json.load(file)
-            return data if isinstance(data, dict) else {}
+            if not isinstance(data, dict):
+                return {}
+            search = data.get("search")
+            if isinstance(search, dict) and "experience_level" in search:
+                search["experience_level"] = normalize_setting(
+                    "search", "experience_level", search["experience_level"])
+            return data
     except (FileNotFoundError, json.JSONDecodeError, OSError, ValueError):
         return {}
 

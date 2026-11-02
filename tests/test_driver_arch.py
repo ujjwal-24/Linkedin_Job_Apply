@@ -64,6 +64,35 @@ def test_selenium_manager_returning_junk_returns_none(monkeypatch):
     assert oc.get_managed_driver_path() is None
 
 
+def test_windows_copy_matches_real_patchers_exe_path(monkeypatch, tmp_path):
+    """Use UC's real constructor: on Windows it appends .exe to custom paths."""
+    from pathlib import Path
+    import undetected_chromedriver.patcher as patcher_module
+
+    cached = tmp_path / "cache" / "chromedriver.exe"
+    cached.parent.mkdir()
+    cached.write_bytes(b"test driver")
+    monkeypatch.setattr(sys, "platform", "win32")
+    monkeypatch.setattr(uc.Patcher, "platform", "win32")
+    monkeypatch.setattr(patcher_module, "IS_POSIX", False)
+    monkeypatch.setattr(uc.Patcher, "data_path", str(tmp_path / "app-dir"))
+    monkeypatch.setattr(SeleniumManager, "binary_paths",
+                        mock.Mock(return_value={"driver_path": str(cached)}))
+    patched = []
+
+    def patch_existing(patcher):
+        path = Path(patcher.executable_path)
+        assert path.suffix == ".exe"
+        assert path.read_bytes() == b"test driver"
+        patched.append(str(path))
+
+    monkeypatch.setattr(uc.Patcher, "auto", patch_existing)
+    result = oc.get_managed_driver_path()
+    assert result is not None
+    assert patched == [result]
+    assert result != str(cached)
+
+
 @pytest.mark.parametrize("platform", ["win32", "linux", "linux2"])
 def test_non_darwin_never_shells_out_to_codesign(monkeypatch, platform):
     monkeypatch.setattr(sys, "platform", platform)
